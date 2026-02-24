@@ -1,28 +1,19 @@
-
-import java.util.List;
-import java.nio.charset.StandardCharsets;
-
 public class Demo05 {
     public static void main(String[] args) {
         System.out.println("=== Export Demo ===");
 
         ExportRequest req = new ExportRequest("Weekly Report", SampleData.longBody());
-        List<Exporter> exporters = List.of(new PdfExporter(), new CsvExporter(), new JsonExporter());
+        Exporter pdf = new PdfExporter();
+        Exporter csv = new CsvExporter();
+        Exporter json = new JsonExporter();
 
+        System.out.println("PDF: " + describe(pdf.export(req)));
+        System.out.println("CSV: " + describe(csv.export(req)));
+        System.out.println("JSON: " + describe(json.export(req)));
+    }
 
-
-
-        for (Exporter e : exporters) {
-            try {
-                ExportResult out = e.export(req);
-                String prefix = e instanceof PdfExporter ? "PDF" : 
-                                e instanceof CsvExporter ? "CSV" : "JSON";
-                System.out.println(prefix + ": OK bytes=" + out.bytes.length);
-            } catch (Exception ex) {
-                String prefix = e instanceof PdfExporter ? "PDF" : 
-                                e instanceof CsvExporter ? "CSV" : "JSON";
-                System.out.println(prefix + ": ERROR: " + ex.getMessage());
-            }
-        }
+    private static String describe(ExportResult r) {
+        if (r.isError()) return "ERROR: " + r.error;
+        return "OK bytes=" + r.bytes.length;
     }
 }
