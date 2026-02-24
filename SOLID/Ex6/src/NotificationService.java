@@ -9,21 +9,10 @@ public class NotificationService {
         this.audit = audit;
         this.channels = channels;
     }
-
     public void broadcast(Notification n) {
         for (NotificationChannel channel : channels) {
-            try {
-                channel.send(n);
-                audit.add(channel.getClass().getSimpleName() + " sent");
-
-            } catch (Exception e) {
-                if (e.getMessage().contains(":")) {
-                    System.out.println(e.getMessage().replace("WA:", "WA ERROR:"));
-                } else {
-                    System.out.println(channel.getClass().getSimpleName() + " ERROR: " + e.getMessage());
-                }
-                audit.add(channel.getClass().getSimpleName() + " failed");
-            }
+            channel.send(n);
+            audit.add(channel.getClass().getSimpleName() + " sent");
         }
     }
 }
