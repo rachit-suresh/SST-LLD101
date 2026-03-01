@@ -7,7 +7,7 @@ public class Main {
         reg.add(new AirConditioner());
         reg.add(new AttendanceScanner());
 
-        ClassroomController c = new ClassroomController(reg);
+        ClassroomControllerInterface c = new ClassroomController(reg);
         c.startClass();
         c.endClass();
     }

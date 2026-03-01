@@ -1,23 +1,28 @@
-public class ClassroomController {
+public class ClassroomController implements ClassroomControllerInterface {
     private final DeviceRegistry reg;
 
-    public ClassroomController(DeviceRegistry reg) { this.reg = reg; }
-
-    public void startClass() {
-        SmartClassroomDevice pj = reg.getFirstOfType("Projector");
-        pj.powerOn();
-        pj.connectInput("HDMI-1");
-
-        SmartClassroomDevice lights = reg.getFirstOfType("LightsPanel");
-        lights.setBrightness(60);
-
-        SmartClassroomDevice ac = reg.getFirstOfType("AirConditioner");
-        ac.setTemperatureC(24);
-
-        SmartClassroomDevice scan = reg.getFirstOfType("AttendanceScanner");
-        System.out.println("Attendance scanned: present=" + scan.scanAttendance());
+    public ClassroomController(DeviceRegistry reg) {
+        this.reg = reg;
     }
 
+    @Override
+    public void startClass() {
+        
+        SmartClassroomDevice pjDevice = reg.getFirstOfType("Projector");
+        pjDevice.powerOn();
+        ((ProjectorInterface) pjDevice).connectInput("HDMI-1");
+
+
+        ((LightPanelInterface) reg.getFirstOfType("LightsPanel")).setBrightness(60);
+
+
+        ((AirConditionerInterface) reg.getFirstOfType("AirConditioner")).setTemperatureC(24);
+
+        System.out.println("Attendance scanned: present=" +
+            ((AttendanceScannerInterface) reg.getFirstOfType("AttendanceScanner")).scanAttendance());
+    }
+
+    @Override
     public void endClass() {
         System.out.println("Shutdown sequence:");
         reg.getFirstOfType("Projector").powerOff();
