@@ -7,14 +7,11 @@ public class ClassroomController implements ClassroomControllerInterface {
 
     @Override
     public void startClass() {
-        
         SmartClassroomDevice pjDevice = reg.getFirstOfType("Projector");
         pjDevice.powerOn();
         ((ProjectorInterface) pjDevice).connectInput("HDMI-1");
 
-
         ((LightPanelInterface) reg.getFirstOfType("LightsPanel")).setBrightness(60);
-
 
         ((AirConditionerInterface) reg.getFirstOfType("AirConditioner")).setTemperatureC(24);
 
