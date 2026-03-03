@@ -1,57 +1,28 @@
 package com.example.metrics;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class MetricsRegistry implements Serializable {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+public enum MetricsRegistry {
+    INSTANCE;
+    private final Map<String, Long> counters = new ConcurrentHashMap<>();
 
-    private static volatile MetricsRegistry INSTANCE;
-
-    private final Map<String, Long> counters = new HashMap<>();
-
-    private MetricsRegistry() {
-        if (INSTANCE != null) {
-            throw new IllegalStateException(
-                "Singleton already created — use MetricsRegistry.getInstance()");
-        }
-    }
-
-    public static MetricsRegistry getInstance() {
-        if (INSTANCE == null) {
-            synchronized (MetricsRegistry.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new MetricsRegistry();
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
-    @Serial
-    protected Object readResolve() {
-        return INSTANCE;
-    }
-
-    public synchronized void setCount(String key, long value) {
+    public void setCount(String key, long value) {
         counters.put(key, value);
     }
 
-    public synchronized void increment(String key) {
-        counters.put(key, getCount(key) + 1);
+    public void increment(String key) {
+        counters.compute(key, (k, v) -> (v == null) ? 1L : v + 1L);
     }
 
-    public synchronized long getCount(String key) {
+    public long getCount(String key) {
         return counters.getOrDefault(key, 0L);
     }
 
-    public synchronized Map<String, Long> getAll() {
+    public Map<String, Long> getAll() {
         return Collections.unmodifiableMap(new HashMap<>(counters));
     }
-
 }

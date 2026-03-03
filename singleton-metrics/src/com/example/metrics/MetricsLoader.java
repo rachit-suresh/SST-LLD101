@@ -12,7 +12,7 @@ public class MetricsLoader {
             props.load(fis);
         }
 
-        MetricsRegistry registry = MetricsRegistry.getInstance();
+        MetricsRegistry registry = MetricsRegistry.INSTANCE;
 
         for (String key : props.stringPropertyNames()) {
             String raw = props.getProperty(key, "0").trim();

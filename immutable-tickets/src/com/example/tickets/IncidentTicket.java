@@ -35,7 +35,7 @@ public final class IncidentTicket {
     public String getTitle()           { return title; }
     public String getDescription()     { return description; }
     public String getPriority()        { return priority; }
-    public List<String> getTags()      { return tags; }
+    public List<String> getTags()      { return new ArrayList<>(tags); }
     public String getAssigneeEmail()   { return assigneeEmail; }
     public boolean isCustomerVisible() { return customerVisible; }
     public Integer getSlaMinutes()     { return slaMinutes; }
