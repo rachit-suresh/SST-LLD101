@@ -25,7 +25,7 @@ public class MapMarker {
         this.label = label;
 
         // BROKEN: per-marker allocation
-        this.style = new MarkerStyle(shape, color, size, filled);
+        this.style = MarkerStyleFactory.get(shape, color, size, filled);
     }
 
     public double getLat() { return lat; }
